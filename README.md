@@ -1,6 +1,7 @@
 # Video Searcher
 
 This project is a testing of my skills in js
+The app uses Angulajs,Grunt,Bower,Bootstrap,HTML5 etc, and it's kickstarted by Yeoman.
 
 # Instructions
 
