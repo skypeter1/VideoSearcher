@@ -5,7 +5,7 @@ The app uses Angulajs,Grunt,Bower,Bootstrap,HTML5 etc, and it's kickstarted by Y
 
 # Instructions
 
-First you gotta have [NodeJS](http://nodejs.org/download/) Installed
+First you got to have [NodeJS](http://nodejs.org/download/) Installed
 
 Then install npm an bower
 
