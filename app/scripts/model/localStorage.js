@@ -18,7 +18,7 @@ angular.module('Model')
 
 	return {
 		save: function(){
-			return "test factory model";
+			return "test";
 		}
 
 	};

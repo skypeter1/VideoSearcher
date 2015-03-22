@@ -5,9 +5,11 @@
  * @name VideoSearchApp.controller:MainCtrl
  *
  * @description
+ *
  * # This is the main controller for the app
  * # and has all the functions that we need to provide
- * # the functionality
+ * # the functionality in the view
+ *
  * Controller of the VideoSearchApp
  *
  */
@@ -60,7 +62,6 @@ angular.module('VideoSearchApp')
 	 * This function set the actual data to the local storage
 	 */  
     $scope.$watch('words', function () {
-
       localStorageService.set('words', $scope.words);
     }, true);
 
