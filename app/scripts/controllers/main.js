@@ -48,8 +48,10 @@ angular.module('VideoSearchApp')
   	 */
 	$scope.$watch('search',function(actual, before){
 	    if(actual !== before){
+	    	if(!actual==''){
 	    	$scope.words.push(actual);
 	    	$scope.words.reverse();
+	    	}
 	      	VideoService.returnMatchedVideos(actual)
 	      	.then(function(response){
 	        	$scope.videos = response.results;
