@@ -12,11 +12,15 @@
 
 <!-- Searcher input -->
 <br>
-<div class="input-group">
+<div class="input-group" >
   <span class="input-group-addon" id="basic-addon1"><i class="glyphicon glyphicon-pencil"></i></span>
-  <input type="text" class="form-control" ng-model="search" ng-model-options="{ updateOn: 'default blur', debounce: {'default': 200, 'blur': 0} }" placeholder="Enter Keywords for your video search" aria-describedby="basic-addon1">
+  <input type="text" class="form-control" ng-focus="list=true" ng-blur="list=false" ng-model="search" ng-model-options="{ updateOn: 'default blur', debounce: {'default': 300, 'blur': 0} }" ng-value="local" placeholder="Enter Keywords for your video search" aria-describedby="basic-addon1" >
 </div>
 
+<!-- List of words -->
+  <div class="list-group" ng-show="list">
+      <a href="#" class="list-group-item"  ng-repeat="word in words | limitTo: 6 ">{{word}}</a>
+  </div>
 
   <section  class="bg-light-gray">
 
@@ -50,6 +54,7 @@
     </div>
 
   </section>
+
 
   <!-- Footer Section -->
     <footer>

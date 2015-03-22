@@ -12,7 +12,12 @@
  *
  */
 angular.module('VideoSearchApp')
-.controller('MainCtrl', function ($scope, VideoGallery, VideoService, $location) {
+.controller('MainCtrl', function ($scope, VideoGallery, VideoService, $location, localStorageService) {
+
+	/**
+	 * Keywords container
+	 */
+	var wordsInStore = localStorageService.get('words');
 
 	/**
 	 * The video results
@@ -23,6 +28,11 @@ angular.module('VideoSearchApp')
   	 * The general titles
   	 */
   	$scope.Title = VideoGallery.title;
+
+  	/**
+  	 * Initializes the scope.words variable
+  	 */
+    $scope.words = wordsInStore || [];
 
   	/**
    	 * This function open the video in a new tab
@@ -36,6 +46,8 @@ angular.module('VideoSearchApp')
   	 */
 	$scope.$watch('search',function(actual, before){
 	    if(actual !== before){
+	    	$scope.words.push(actual);
+	    	$scope.words.reverse();
 	      	VideoService.returnMatchedVideos(actual)
 	      	.then(function(response){
 	        	$scope.videos = response.results;
@@ -43,6 +55,14 @@ angular.module('VideoSearchApp')
 	      	});
 	    }
 	},true);
+
+	/**
+	 * This function set the actual data to the local storage
+	 */  
+    $scope.$watch('words', function () {
+
+      localStorageService.set('words', $scope.words);
+    }, true);
 
 });
 
