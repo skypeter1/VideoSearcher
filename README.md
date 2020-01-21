@@ -36,10 +36,12 @@ Please make sure that you have grunt installed
 
 and Karma,Jasmine and Compass
 
-`npm install karma grunt-karma`
-`npm install jasmine-core`
-`npm install -g compass`
-`gem install compass`
+``` Bash
+npm install karma grunt-karma
+npm install jasmine-core
+npm install -g compass
+gem install compass
+```
 
 To install ruby
 
