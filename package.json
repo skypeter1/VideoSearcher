@@ -1,7 +1,11 @@
 {
   "name": "angular",
   "version": "0.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "compass": "^0.1.1",
+    "jasmine-core": "^3.5.0",
+    "karma": "^4.4.1"
+  },
   "repository": {},
   "devDependencies": {
     "grunt": "^0.4.5",
