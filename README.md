@@ -11,9 +11,11 @@ Then install npm an bower
 
 on linux with 
 
-`npm install`
-`npm install -g bower`
-`bower install`
+``` Bash
+npm install
+npm install -g bower
+bower install
+```
 
 on Windows
 
