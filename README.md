@@ -24,23 +24,45 @@ then you can use it in your command line. To install bower use npm like this:
 
 ## Build & development
 
+To run the project locally make sure you have the next
+
+Ruby
+
+`sudo apt-get install ruby`ruby -e 'puts RUBY_VERSION[/\d+\.\d+/]'`-dev`
+
 Please make sure that you have grunt installed
 
 `sudo apt install node-grunt-cli`
 
-and Karma and Compass
+and Karma,Jasmine and Compass
 
 `npm install karma grunt-karma`
+`npm install jasmine-core`
 `npm install -g compass`
+`gem install compass`
 
+To install ruby
+
+`sudo apt-get install ruby`ruby -e 'puts RUBY_VERSION[/\d+\.\d+/]'`-dev`
 
 
 In the project directory resolve any new the dependencies with
 
 `bower install`
 
-`grunt` for building and 
+
+`grunt` for building
+
+To check Karma Server
+Karma v4.4.1 server started at http://0.0.0.0:8080/
+
+
 `grunt serve` for preview.
+
+http://localhost:9000/#!/
+
+
+
 
 
 
