@@ -47,11 +47,6 @@ npm install -g compass
 gem install compass
 ```
 
-To install ruby
-
-`sudo apt-get install ruby`ruby -e 'puts RUBY_VERSION[/\d+\.\d+/]'`-dev`
-
-
 In the project directory resolve any new the dependencies with
 
 `bower install`
