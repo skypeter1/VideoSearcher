@@ -53,7 +53,8 @@ angular.module('VideoSearchApp')
 	    // 	$scope.words.reverse();
 	    // 	}
 	      	VideoService.returnMatchedVideos(actual)
-	      	.then(function(response){
+	      	.then(function(response,items){
+				 // $scope.videos = items;
 	        	$scope.videos = response.results;
 	        	$scope.Title = response.title;
 	      	});
