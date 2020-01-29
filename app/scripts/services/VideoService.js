@@ -26,6 +26,7 @@ angular.module('Service')
 	 */
 	function jsonpRequest(url,parameters)
 	{
+		parameters = '';
 		return $http.jsonp(url, {jsonpCallbackParam: 'callback'});
 	}
 
@@ -50,7 +51,7 @@ angular.module('Service')
 	  });
 	    return	{
 	      	results: videos,
-	      	title: "My Awesome Videos"
+	      	title: 'My Awesome Videos'
 	    };
   	}
 

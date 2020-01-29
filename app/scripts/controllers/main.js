@@ -46,13 +46,12 @@ angular.module('VideoSearchApp')
   	/**
   	 * This function search videos related to the given keyword
   	 */
-	$scope.$watch('search',function(actual, before){
+	$scope.$watch('search',function(actual){
 	      	VideoService.returnMatchedVideos(actual)
 	      	.then(function(response){
 	        	$scope.videos = response.results;
 	        	$scope.Title = response.title;
 	      	});
-	    // }
 	},true);
 
 	/**
