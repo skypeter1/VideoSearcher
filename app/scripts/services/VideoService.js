@@ -40,14 +40,6 @@ angular.module('Service')
 	 */
 	function jsonpRequest(url,parameters)
 	{
-		//var myPromise = $http.jsonp('https://www.googleapis.com/youtube/v3/videos?key=AIzaSyDTHIxJ-BjksN1Xo_F7kKTpBHFqJ6vQlQQ&fields=items(snippet(title,tags,channelTitle,publishedAt),statistics(viewCount))&chart=mostPopular&part=snippet,statistics&maxResults=50');
-		// $http.jsonp(url,parameters)
-		// $http.jsonp('https://www.googleapis.com/youtube/v3/videos?key=AIzaSyDTHIxJ-BjksN1Xo_F7kKTpBHFqJ6vQlQQ&fields=items(snippet(title,tags,channelTitle,publishedAt),statistics(viewCount))&chart=mostPopular&part=snippet,statistics&maxResults=50?callback=JSON_CALLBACK')
-		// 	.success(function(data){
-		// 		//console.log(data);
-		// 	});
-		//myPromise.longStackTraces();
-		// console.log(myPromise);\
 
 		var url = "http://public-api.wordpress.com/rest/v1/sites/wtmpeachtest.wordpress.com/posts?callback=JSON_CALLBACK";
 
