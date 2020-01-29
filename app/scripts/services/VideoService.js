@@ -40,24 +40,8 @@ angular.module('Service')
 	 */
 	function jsonpRequest(url,parameters)
 	{
-
-		var url = "http://public-api.wordpress.com/rest/v1/sites/wtmpeachtest.wordpress.com/posts?callback=JSON_CALLBACK";
-
-        $http.jsonp(url,{jsonpCallbackParam: 'JSON_CALLBACK'})
-            .then(function(data){
-                console.log(data);
-            });
-    
-
-		var url = 'https://www.googleapis.com/youtube/v3/videos?key=AIzaSyDTHIxJ-BjksN1Xo_F7kKTpBHFqJ6vQlQQ&fields=items(snippet(title,tags,channelTitle,publishedAt),statistics(viewCount))&chart=mostPopular&part=snippet,statistics&maxResults=50';
-		//var trustedUrl = $sce.trustAsResourceUrl(url);
-
-		// $http.jsonp(url, {jsonpCallbackParam: 'JSON_CALLBACK'})
-		//    .then(function(data,status,headers){
-			   
-		//    });
+		var url = 'https://www.googleapis.com/youtube/v3/videos?key=AIzaSyDTHIxJ-BjksN1Xo_F7kKTpBHFqJ6vQlQQ&chart=mostPopular&part=snippet,statistics&maxResults=50';
 		return $http.jsonp(url, {jsonpCallbackParam: 'callback'});
-		//return $http.jsonp(url,parameters);
 	}
 
 	/*
@@ -66,25 +50,28 @@ angular.module('Service')
 	function getData(data)
 	{
     
-    	var result = data.data.feed;
-    	var videos = (result.entry)
-    	.map(function(video){
-	      	return	{
-		        title: video.title.$t,
-			    author : video.author[0].name.$t,
-		        published : video.published.$t,
-		        noviews : video.yt$statistics.viewCount,
-		        duration : video.media$group.yt$duration.seconds,
-		        authorURL : video.author[0].uri.$t,
-		        url: video.link[0].href,
-		        thumbnail: video.media$group.media$thumbnail[0].height > 300 ? video.media$group.media$thumbnail[0].url : video.media$group.media$thumbnail[1].url
-	      	};
-    	});
+		var result = data.data;
+		var videos = result.items
+		.map(function(videos){
+			console.log('test');
+			return	{
+			  title: videos.snippet.title,
+			  author : videos.snippet.channelId,
+			  published : videos.snippet.publishedAt,
+			  noviews : videos.statistics.viewCount,
+			  duration : videos.statistics.commentCount,
+			  authorURL : videos.snippet.channelId,
+			  url: videos.snippet.channeId,
+			  thumbnail: videos.snippet.thumbnails.default.url
+			//   thumbnail: snippet.thumbnails.default.width > 300  ?  snippet.thumbnails.default.url : snippet.thumbnails.medium.url
+			//   thumbnail: video.media$group.media$thumbnail[0].height > 300 ? video.media$group.media$thumbnail[0].url : video.media$group.media$thumbnail[1].url
+			};
+	  });
 
-	    	return	{
-	      		results: videos,
-	      		title: result.title.$t
-	    	};
+	    return	{
+	      	results: 'result',
+	      	title: "title"
+	    };
   	}
 
 
@@ -95,12 +82,11 @@ angular.module('Service')
 	 * This method returns an array with the information fo the most popular videos
 	 */		
     returnPopularVideos: function() {
-		//   return jsonpRequest([apiUrl,'standardfeeds/most_popular?v=2'].join(''), parameters)
 		return jsonpRequest(apiUrl, parameters)
       	.then(function(data){
         	return getData(data);
       	})
-      	.catch(function(err){
+      	.catch(function(){
         	$location.path('/');
       });
     },
