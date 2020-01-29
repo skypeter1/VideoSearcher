@@ -24,6 +24,16 @@ angular
     'LocalStorageModule'
   ])
 
+  .config(function($sceDelegateProvider) {
+    $sceDelegateProvider.resourceUrlWhitelist([
+      // Allow same origin resource loads.
+      'self',
+      // Allow loading from our assets domain.  Notice the difference between * and **.
+      '*://www.googleapis.com/**' ,
+      '*://public-api.wordpress.com/**'
+    ]);
+  })
+
   .config(function ($routeProvider) {
    $routeProvider
   .when('/', {
@@ -32,6 +42,9 @@ angular
     resolve: {
       VideoGallery: function($location,$route,VideoService) {
         return VideoService.returnPopularVideos()
+
+
+
         .catch(function() {
             $location.path('/');
           });

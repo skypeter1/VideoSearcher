@@ -47,17 +47,17 @@ angular.module('VideoSearchApp')
   	 * This function search videos related to the given keyword
   	 */
 	$scope.$watch('search',function(actual, before){
-	    if(actual !== before){
-	    	if(!actual==''){
-	    	$scope.words.push(actual);
-	    	$scope.words.reverse();
-	    	}
+	    // if(actual !== before){
+	    // 	if(!actual==''){
+	    // 	$scope.words.push(actual);
+	    // 	$scope.words.reverse();
+	    // 	}
 	      	VideoService.returnMatchedVideos(actual)
 	      	.then(function(response){
 	        	$scope.videos = response.results;
 	        	$scope.Title = response.title;
 	      	});
-	    }
+	    // }
 	},true);
 
 	/**
