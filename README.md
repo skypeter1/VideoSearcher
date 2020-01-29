@@ -30,7 +30,9 @@ To run the project locally make sure you have the next
 
 Ruby
 
-`sudo apt-get install ruby`ruby -e 'puts RUBY_VERSION[/\d+\.\d+/]'`-dev`
+```Bash 
+sudo apt-get install ruby`ruby -e 'puts RUBY_VERSION[/\d+\.\d+/]'`-dev
+```
 
 Please make sure that you have grunt installed
 
