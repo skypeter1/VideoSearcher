@@ -1,65 +1,72 @@
 'use strict';
 
 /**
- * 
- * @name VideoSearchApp.controller:MainCtrl
- *
- * @description
- *
- * # This is the main controller for the app
- * # and has all the functions that we need to provide
- * # the functionality in the view
- *
- * Controller of the VideoSearchApp
- *
+ * MainCtrl — search UI and video gallery.
  */
-angular.module('VideoSearchApp')
-.controller('MainCtrl', function ($scope, VideoGallery, VideoService, $location, localStorageService) {
+angular
+  .module('VideoSearchApp')
+  .controller('MainCtrl', function (
+    $scope,
+    VideoGallery,
+    VideoService,
+    localStorageService
+  ) {
+    var wordsInStore = localStorageService.get('words');
 
-	/**
-	 * Keywords container
-	 */
-	var wordsInStore = localStorageService.get('words');
-
-	/**
-	 * The video results
-	 */
-  	$scope.videos = VideoGallery.results;
-  	
-  	/**
-  	 * The general titles
-  	 */
-  	$scope.Title = VideoGallery.title;
-
-  	/**
-  	 * Initializes the scope.words variable
-  	 */
+    $scope.videos = VideoGallery.results || [];
+    $scope.Title = VideoGallery.title || 'Popular videos';
+    $scope.error = VideoGallery.error || '';
+    $scope.loading = false;
     $scope.words = wordsInStore || [];
+    $scope.search = '';
 
-  	/**
-   	 * This function open the video in a new tab
-   	 */
-  	$scope.openInNewTab = function openInNewTab(url) {
-    	window.open(url,'_blank');
-  	};
+    $scope.openInNewTab = function (url) {
+      if (!url) {
+        return;
+      }
+      window.open(url, '_blank', 'noopener,noreferrer');
+    };
 
-  	/**
-  	 * This function search videos related to the given keyword
-  	 */
-	$scope.$watch('search',function(actual){
-	      	VideoService.returnMatchedVideos(actual)
-	      	.then(function(response){
-	        	$scope.videos = response.results;
-	        	$scope.Title = response.title;
-	      	});
-	},true);
+    $scope.useWord = function (word) {
+      $scope.search = word;
+    };
 
-	/**
-	 * This function set the actual data to the local storage
-	 */  
-    $scope.$watch('words', function () {
+    function rememberWord(word) {
+      var next = ($scope.words || []).filter(function (w) {
+        return w !== word;
+      });
+      next.unshift(word);
+      $scope.words = next.slice(0, 8);
       localStorageService.set('words', $scope.words);
-    }, true);
+    }
 
-});
+    $scope.$watch(
+      'search',
+      function (actual, previous) {
+        if (actual === previous) {
+          return;
+        }
 
+        var query = (actual || '').trim();
+        $scope.loading = true;
+        $scope.error = '';
+
+        VideoService.returnMatchedVideos(query)
+          .then(function (response) {
+            $scope.videos = response.results || [];
+            $scope.Title = response.title;
+            if (query) {
+              rememberWord(query);
+            }
+          })
+          .catch(function (err) {
+            $scope.videos = [];
+            $scope.Title = 'Search failed';
+            $scope.error = (err && err.message) || 'Request failed';
+          })
+          .finally(function () {
+            $scope.loading = false;
+          });
+      }
+    );
+  });

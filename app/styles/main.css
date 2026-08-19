@@ -1,0 +1,83 @@
+.browsehappy {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em;
+}
+
+body {
+  padding: 0;
+  background: #f7f8fa;
+}
+
+.header,
+.footer {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.header {
+  border-bottom: 1px solid #e5e5e5;
+  margin-bottom: 10px;
+}
+
+.footer {
+  padding-top: 19px;
+  margin-top: 24px;
+  color: #777;
+  border-top: 1px solid #e5e5e5;
+}
+
+.brand-block {
+  margin-top: 12px;
+  margin-bottom: 8px;
+}
+
+.brand-logo {
+  width: 210px;
+  max-width: 60%;
+  height: auto;
+}
+
+.search-box {
+  margin: 16px 0 8px;
+}
+
+.recent-words {
+  margin-bottom: 12px;
+}
+
+.video-card {
+  margin-bottom: 20px;
+}
+
+.video-attr {
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.img-centered {
+  margin: 8px auto 0;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+.bg-light-gray {
+  padding-top: 8px;
+}
+
+@media screen and (min-width: 768px) {
+  .container {
+    max-width: 960px;
+  }
+
+  .header,
+  .footer {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .header {
+    margin-bottom: 30px;
+  }
+}

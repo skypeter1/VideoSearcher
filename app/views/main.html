@@ -1,62 +1,72 @@
-
 <!-- Header -->
-<center>
-  <div>
-    <img src="images/video.png" style="width:210px" alt="">
-  </div>
+<div class="text-center brand-block">
+  <img src="images/video.png" class="brand-logo" alt="Video Searcher">
   <h2>
-    <span class="label label-success">Video Searcher  <i class="glyphicon glyphicon-facetime-video"></i>
+    <span class="label label-success">
+      Video Searcher <i class="glyphicon glyphicon-facetime-video"></i>
     </span>
   </h2>
-</center>
-
-<!-- Searcher input -->
-<br>
-<div class="input-group" >
-  <span class="input-group-addon" id="basic-addon1"><i class="glyphicon glyphicon-pencil"></i></span>
-  <input type="text" class="form-control" ng-focus="list=true" ng-blur="list=false" ng-model="search" ng-model-options="{ updateOn: 'default blur', debounce: {'default': 300, 'blur': 0} }" ng-value="local" placeholder="Enter Keywords for your video search" aria-describedby="basic-addon1" >
 </div>
 
-<!-- List of words -->
-  <div class="list-group" ng-show="list">
-      <a href="#" class="list-group-item"  ng-repeat="word in words | limitTo: 6 ">{{word}}</a>
+<!-- Search -->
+<div class="input-group search-box">
+  <span class="input-group-addon" id="basic-addon1">
+    <i class="glyphicon glyphicon-pencil"></i>
+  </span>
+  <input
+    type="search"
+    class="form-control"
+    ng-focus="list=true"
+    ng-blur="list=false"
+    ng-model="search"
+    ng-model-options="{ debounce: 400 }"
+    placeholder="Enter keywords for your video search"
+    aria-describedby="basic-addon1"
+    autocomplete="off"
+  >
+</div>
+
+<div class="list-group recent-words" ng-show="list && words.length">
+  <a
+    href=""
+    class="list-group-item"
+    ng-repeat="word in words | limitTo: 6"
+    ng-mousedown="useWord(word)"
+  >{{word}}</a>
+</div>
+
+<p class="text-danger" ng-if="error">{{error}}</p>
+<p class="text-muted" ng-if="loading">Searching…</p>
+
+<section class="bg-light-gray">
+  <div class="row">
+    <div class="col-lg-12 text-center">
+      <h3><span class="label label-warning">{{Title}}</span></h3>
+    </div>
   </div>
 
-  <section  class="bg-light-gray">
-
-    <!-- Videos Title -->
-    <div class="row">
-      <div class="col-lg-12 text-center">
-          <h3><span class="label label-warning">{{Title}}</span></h3>
-      </div>
+  <div class="row">
+    <div class="col-md-4 col-sm-6 video-card" ng-repeat="video in videos">
+      <span class="label label-default">{{::video.author}}</span>
+      <p class="text-muted video-attr">{{::video.title}}</p>
+      <p class="text-muted video-attr">Duration: {{::video.duration}}</p>
+      <p class="text-muted video-attr">Uploaded: {{::video.published | date:'mediumDate'}}</p>
+      <p class="text-muted video-attr">{{::video.noviews}} views</p>
+      <a href="" ng-click="openInNewTab(video.url)">
+        <img
+          ng-src="{{::video.thumbnail}}"
+          alt="{{::video.title}}"
+          class="img-responsive img-centered"
+        >
+      </a>
     </div>
+  </div>
 
-    <!-- Video Gallery Section -->
-    <div class="row">
-      <div class="col-md-4 col-sm-6" ng-repeat="video in videos"><br>
-
-        <span class="label label-default">{{::video.author}}</span>
-        <p class="text-muted video-attr" style="font-size:10px">Duration: {{::video.duration}} seconds</p>
-        <p class="text-muted video-attr" style="font-size:10px">Uploaded: {{::video.published}}</p>
-        <p class="text-muted video-attr" style="font-size:10px">{{::video.noviews}} views</p>
-        <a href="#/">
-          <img src="{{::video.thumbnail}}" ng-click="openInNewTab(video.url)" class="img-responsive img-centered">
-        </a>
-            <br>
-      </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h3>
+        <span class="label label-success">{{videos.length}} videos found</span>
+      </h3>
     </div>
-    
-    <!-- Number of Videos -->
-    <div clas="row">
-      <div class="col-md-12">
-        <h3> <span class="label label-success">{{videos.length}} videos found</span></h3>
-      </div>
-    </div>
-
-  </section>
-
-
-  <!-- Footer Section -->
-    <footer>
-        <div class="container"></div>
-    </footer>
+  </div>
+</section>

@@ -1,69 +1,81 @@
 # Video Searcher
 
-This project is a testing of my skills in js
-The app uses Angulajs,Grunt,Bower,Bootstrap,HTML5,Compass etc, and it's kickstarted by Yeoman.
+Search YouTube videos by keyword. AngularJS 1.8 front end with a small Node/Express server.
 
-## Instructions
+### Prerequisites
 
-First you got to have [NodeJS](http://nodejs.org/download/) Installed
+- Node.js 20+
+- npm
+- Docker (for container targets)
+- Make
+- A YouTube Data API v3 key
 
-Then install npm an bower
+### YouTube API key
 
-on linux with 
+1. Open [Google Cloud Console](https://console.cloud.google.com/) → create or pick a project.
+2. **APIs & Services → Library** → enable **YouTube Data API v3**.
+3. **APIs & Services → Credentials** → **Create credentials → API key**.
+4. Copy `.env.example` to `.env` and set the key:
 
-``` Bash
+```bash
+cp .env.example .env
+```
+
+```bash
+YOUTUBE_API_KEY=your_api_key_here
+```
+
+5. Restart the app (`make run-app` or `make run-local-image`).
+
+Without a key, the UI loads but video requests fail with a clear error.
+
+### Run locally (Node)
+
+```bash
+cp .env.example .env   # then edit YOUTUBE_API_KEY
+make build
+make run-app
+```
+
+Or:
+
+```bash
 npm install
-npm install -g bower
-bower install
+npm start
 ```
 
-on Windows
+Open http://localhost:8080/
 
-into the folder of Nodejs look for the npm.cmd file and add it to your local variables
-then you can use it in your command line. To install bower use npm like this:
+### Makefile targets
 
-`npm install -g bower`
+| Target | Description |
+| --- | --- |
+| `make` / `make default` | Show image/app info |
+| `make env-info` | Print application/image variables |
+| `make test` | Install deps and run the test suite |
+| `make build` | Install npm dependencies |
+| `make run-app` | Run the app with Node on port 8080 |
+| `make build-image` | Build the Docker image |
+| `make run-local-image` | Build and run the app in Docker on port 8080 |
+| `make shell` | Build the image and open a shell inside it |
+| `make stop` | Stop/remove the local container |
+| `make clean` | Stop container, remove image, delete `node_modules` |
 
-## Build & development
+### Run with Docker
 
-To run the project locally make sure you have the next
-
-Ruby
-
-```Bash 
-sudo apt-get install ruby`ruby -e 'puts RUBY_VERSION[/\d+\.\d+/]'`-dev
+```bash
+cp .env.example .env   # then edit YOUTUBE_API_KEY
+make run-local-image
 ```
 
-Please make sure that you have grunt installed
+Open http://localhost:8080/
 
-`sudo apt install node-grunt-cli`
+Stop with `make stop`. Shell into the image with `make shell`.
 
-and Karma,Jasmine and Compass
+### Tests
 
-``` Bash
-npm install karma grunt-karma
-npm install jasmine-core
-npm install -g compass
-gem install compass
+```bash
+make test
 ```
 
-In the project directory resolve any new the dependencies with
-
-`bower install`
-
-
-`grunt` for building
-
-To check Karma Server
-Karma v4.4.1 server started at http://0.0.0.0:8080/
-
-
-`grunt serve` for preview.
-
-http://localhost:9000/#!/
-
-
-
-
-
-
+Or `npm test`. CI runs the same suite on every pull request via GitHub Actions.

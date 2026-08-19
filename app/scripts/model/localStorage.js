@@ -1,25 +1,15 @@
 'use strict';
 
 /**
- * 
- * @name VideoSearchApp.factory:localStorage
- *
- * @description
- * # This factory stores the keywords introduced by the user 
- * # in a local mode
- *
+ * Thin wrapper kept for module completeness; the app uses angular-local-storage.
  */
-
-angular.module('Model')
-
-
-.factory('localStorage', function () {
-	
-
-	return {
-		save: function(){
-			return 'test';
-		}
-
-	};
+angular.module('Model').factory('localStorage', function (localStorageService) {
+  return {
+    get: function (key) {
+      return localStorageService.get(key);
+    },
+    set: function (key, value) {
+      return localStorageService.set(key, value);
+    }
+  };
 });

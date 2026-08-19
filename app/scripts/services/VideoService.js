@@ -1,89 +1,161 @@
 'use strict';
 
 /**
- * 
- * @name VideoSearchApp.factory:VideoService
- *
- * @description
- * # This file contains the definition for the factory 
- * # that makes the queries at the Youtube API
- *
+ * VideoService — YouTube Data API v3 client.
  */
+angular.module('Service').factory('VideoService', function ($http, $q) {
+  var API_BASE = 'https://www.googleapis.com/youtube/v3/';
 
-angular.module('Service')
-.factory('VideoService', function($http,$location) {
-	  var apiUrl = 'https://www.googleapis.com/youtube/v3/',
-	  parameters = {
-			key:'AIzaSyDTHIxJ-BjksN1Xo_F7kKTpBHFqJ6vQlQQ',
-			fields: 'items(snippet(title,tags,channelTitle,publishedAt),statistics(viewCount))',
-			part: 'snippet,statistics',
-			maxResults: '50',
-			chart: 'mostPopular'
-	  };
+  function apiKey() {
+    return (typeof window !== 'undefined' && window.YOUTUBE_API_KEY) || '';
+  }
 
-	/**
-	 * Make the JSONP Request
-	 */
-	function jsonpRequest(url,parameters)
-	{
-		parameters = '';
-		return $http.jsonp(url, {jsonpCallbackParam: 'callback'});
-	}
+  function ensureKey() {
+    if (!apiKey()) {
+      return $q.reject(new Error('Missing YOUTUBE_API_KEY. See README.'));
+    }
+    return $q.resolve();
+  }
 
-	/*
-	 * Populate array with API Data
-	 */
-	function getData(data)
-	{
-		var result = data.data;
-		var videos = result.items
-		.map(function(result){
-			return	{
-			  title: result.snippet.title,
-			  author : result.snippet.channelId,
-			  published : result.snippet.publishedAt,
-			  noviews : '100',
-			  duration : '1200',
-			  authorURL : result.snippet.channelId,
-			  url: result.snippet.channelId,
-		     thumbnail: result.snippet.thumbnails.default.width > 300  ?  result.snippet.thumbnails.default.url : result.snippet.thumbnails.medium.url
-			};
-	  });
-	    return	{
-	      	results: videos,
-	      	title: 'My Awesome Videos'
-	    };
-  	}
+  function formatDuration(iso) {
+    if (!iso || typeof iso !== 'string') {
+      return '—';
+    }
+    var match = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+    if (!match) {
+      return iso;
+    }
+    var hours = Number(match[1] || 0);
+    var minutes = Number(match[2] || 0);
+    var seconds = Number(match[3] || 0);
+    var parts = [];
+    if (hours) {
+      parts.push(hours + 'h');
+    }
+    if (minutes || hours) {
+      parts.push(minutes + 'm');
+    }
+    parts.push(seconds + 's');
+    return parts.join(' ');
+  }
 
-	return {
+  function videoIdFromItem(item) {
+    if (!item || !item.id) {
+      return '';
+    }
+    if (typeof item.id === 'string') {
+      return item.id;
+    }
+    return item.id.videoId || '';
+  }
 
-	/**
-	 * This method returns an array with the information fo the most popular videos
-	 * TO-DO: Change the url to accept an array with parameters  
-	 */		
-    returnPopularVideos: function() {
-		return jsonpRequest('https://www.googleapis.com/youtube/v3/videos?key=AIzaSyDTHIxJ-BjksN1Xo_F7kKTpBHFqJ6vQlQQ&chart=mostPopular&part=snippet,statistics&maxResults=50', parameters)
-      	.then(function(data){
-        	return getData(data);
-      	})
-      	.catch(function(){
-        	$location.path('/');
+  function mapItem(item) {
+    var snippet = item.snippet || {};
+    var stats = item.statistics || {};
+    var details = item.contentDetails || {};
+    var thumbs = snippet.thumbnails || {};
+    var thumb =
+      (thumbs.medium && thumbs.medium.url) ||
+      (thumbs.high && thumbs.high.url) ||
+      (thumbs.default && thumbs.default.url) ||
+      '';
+    var id = videoIdFromItem(item);
+
+    return {
+      id: id,
+      title: snippet.title || 'Untitled',
+      author: snippet.channelTitle || 'Unknown',
+      published: snippet.publishedAt || '',
+      noviews: stats.viewCount || '—',
+      duration: formatDuration(details.duration),
+      authorURL: snippet.channelId
+        ? 'https://www.youtube.com/channel/' + snippet.channelId
+        : '',
+      url: id ? 'https://www.youtube.com/watch?v=' + id : '',
+      thumbnail: thumb
+    };
+  }
+
+  function wrapResults(items, title) {
+    return {
+      results: (items || []).map(mapItem),
+      title: title
+    };
+  }
+
+  function getVideoDetails(ids) {
+    if (!ids.length) {
+      return $q.resolve([]);
+    }
+    return $http
+      .get(API_BASE + 'videos', {
+        params: {
+          key: apiKey(),
+          id: ids.join(','),
+          part: 'snippet,statistics,contentDetails',
+          maxResults: 50
+        }
+      })
+      .then(function (response) {
+        return (response.data && response.data.items) || [];
+      });
+  }
+
+  return {
+    formatDuration: formatDuration,
+    mapItem: mapItem,
+
+    returnPopularVideos: function () {
+      return ensureKey().then(function () {
+        return $http
+          .get(API_BASE + 'videos', {
+            params: {
+              key: apiKey(),
+              chart: 'mostPopular',
+              part: 'snippet,statistics,contentDetails',
+              maxResults: 24,
+              regionCode: 'US'
+            }
+          })
+          .then(function (response) {
+            return wrapResults(
+              (response.data && response.data.items) || [],
+              'Popular videos'
+            );
+          });
       });
     },
-	
-	/**
-	 * This method return an array with the video information of the videos that match the selected key word
-	 * @keyWords A text field that's been used as filter
-	 * TO-DO: Change the url to accept an array with parameters 
-	 */    
-    returnMatchedVideos: function(keyWords) {
-      	return jsonpRequest([apiUrl,'search?key=AIzaSyDTHIxJ-BjksN1Xo_F7kKTpBHFqJ6vQlQQ&chart=mostPopular&part=snippet,id&maxResults=50&type=video&q='+keyWords].join(''), parameters)
-      	.then(function(data){
-        	return getData(data);
-      	})
-      	.catch(function(){
-        	$location.path('/');
-      	});
-   	  }
-  	};
+
+    returnMatchedVideos: function (keyWords) {
+      var query = (keyWords || '').trim();
+      if (!query) {
+        return this.returnPopularVideos();
+      }
+
+      return ensureKey().then(function () {
+        return $http
+          .get(API_BASE + 'search', {
+            params: {
+              key: apiKey(),
+              part: 'snippet',
+              type: 'video',
+              q: query,
+              maxResults: 24
+            }
+          })
+          .then(function (response) {
+            var items = (response.data && response.data.items) || [];
+            var ids = items
+              .map(videoIdFromItem)
+              .filter(function (id) {
+                return !!id;
+              });
+            return getVideoDetails(ids);
+          })
+          .then(function (details) {
+            return wrapResults(details, 'Results for “' + query + '”');
+          });
+      });
+    }
+  };
 });
