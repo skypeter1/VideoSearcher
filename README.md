@@ -2,6 +2,8 @@
 
 Search YouTube videos by keyword. AngularJS 1.8 front end with a small Node/Express server.
 
+![Video Searcher showing popular YouTube results](docs/app-screenshot.png)
+
 ### Prerequisites
 
 - Node.js 20+
