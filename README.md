@@ -2,8 +2,6 @@
 
 Search YouTube videos by keyword. AngularJS 1.8 front end with a small Node/Express server.
 
-![Video Searcher showing popular YouTube results](docs/app-screenshot.png)
-
 ### Prerequisites
 
 - Node.js 20+
@@ -81,3 +79,7 @@ make test
 ```
 
 Or `npm test`. CI runs the same suite on every pull request via GitHub Actions.
+
+### Preview
+
+<img src="docs/app-screenshot.png" alt="Video Searcher showing popular YouTube results" width="480">
