@@ -24,7 +24,7 @@
     "angular-touch": "^1.8.3",
     "bootstrap": "^3.4.1",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2",
+    "express": "^4.22.3",
     "jquery": "^3.7.1"
   },
   "devDependencies": {
